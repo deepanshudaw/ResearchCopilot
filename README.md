@@ -154,15 +154,6 @@ DB_PATH=research.db
 
 ⸻
 
-🧪 Run Full Pipeline (CLI)
-
-python -m app.pipelines.run_full_pipeline
-
-The Streamlit UI internally calls the same pipeline.
-
-
-⸻
-
 🚧 Known Limitations (v1)
 	•	arXiv API rate limiting
 	•	Occasional LLM JSON formatting errors
@@ -179,21 +170,7 @@ These are design-acknowledged, not architectural blockers.
 	•	Report export (Markdown / LaTeX)
 	•	Cloud deployment
 
-⸻
 
-🎯 Why This Project Matters
-
-Most tools say:
-
-“Here are some papers.”
-
-Research Copilot says:
-
-“Here’s what this field is doing, how it’s evaluated, where it’s weak — and how good this synthesis actually is.”
-
-This is research sensemaking, not search.
-
-⸻
 
 👤 Author
 
