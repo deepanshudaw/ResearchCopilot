@@ -137,37 +137,6 @@ Data and Parsing:
 
 ⸻
 
-Project Structure
-
-research-copilot/
-├── app/
-│   ├── agents/
-│   │   ├── base_agent.py
-│   │   ├── extraction_agent.py
-│   │   ├── synthesis_agent.py
-│   │   └── critic_agent.py
-│   ├── pipelines/
-│   │   ├── run_extraction.py
-│   │   ├── run_synthesis.py
-│   │   ├── run_critic.py
-│   │   └── run_full_pipeline.py
-│   ├── ingestion/
-│   ├── parsing/
-│   └── ui/
-│       └── streamlit_app.py
-├── data/
-│   ├── raw_pdfs/
-│   ├── processed/
-│   ├── extracted/
-│   ├── synthesis/
-│   └── critic/
-├── research.db
-├── .env.example
-└── README.md
-
-
-⸻
-
 Configuration
 
 Create a local environment file (never commit it):
