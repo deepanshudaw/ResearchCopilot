@@ -1,4 +1,4 @@
-# 🧠 Research Copilot
+# Research Copilot
 
 **Research Copilot** is an **agentic literature analysis system** that automates the journey from raw research papers to structured insights, synthesis, and critique using Large Language Models (LLMs).
 
@@ -6,22 +6,22 @@ It is built to help researchers, students, and engineers **rapidly understand a 
 
 ---
 
-## ✨ What This Project Does
+##  What This Project Does
 
 Given a research topic, Research Copilot:
 
-1. 🔍 Searches arXiv for relevant papers  
-2. 📄 Downloads and parses PDFs  
-3. 🧠 Extracts structured metadata using an LLM agent  
-4. 🧩 Synthesizes insights across papers  
-5. 🧪 Critiques the synthesis using a Critic Agent  
-6. 🖥️ Visualizes everything in a Streamlit UI  
+1.  Searches arXiv for relevant papers  
+2.  Downloads and parses PDFs  
+3.  Extracts structured metadata using an LLM agent  
+4.  Synthesizes insights across papers  
+5.  Critiques the synthesis using a Critic Agent  
+6.  Visualizes everything in a Streamlit UI  
 
 All stages are **modular, inspectable, and agent-driven**.
 
 ---
 
-## 🏗️ Architecture Overview
+##  Architecture Overview
 
 Topic
 │
@@ -45,7 +45,7 @@ Each agent runs independently and writes outputs to **disk** and **SQLite**.
 
 ---
 
-## 🤖 Agents
+## Agents
 
 ### 🔍 Extraction Agent
 Reads parsed paper sections and produces structured JSON:
@@ -56,13 +56,13 @@ Reads parsed paper sections and produces structured JSON:
 - key results
 - limitations
 
-### 🧠 Synthesis Agent
+### Synthesis Agent
 Aggregates extractions to identify:
 - dominant research directions
 - common metrics and datasets
 - gaps and open problems
 
-### 🧪 Critic Agent
+### Critic Agent
 Evaluates synthesis quality and outputs:
 - overall rating (out of 10)
 - strengths & weaknesses
@@ -71,19 +71,18 @@ Evaluates synthesis quality and outputs:
 
 ---
 
-## 🖥️ Streamlit UI
+## Streamlit UI
 
 The Streamlit app provides:
 
-- 🚀 One-click pipeline execution
-- 📄 Browse extracted papers
-- 🧠 View synthesis outputs
-- 🧪 Inspect critic feedback
-- 📜 Live pipeline logs
+-  One-click pipeline execution
+-  Browse extracted papers
+-  View synthesis outputs
+-  Inspect critic feedback
+-  Live pipeline logs
 
 Run it with:
 
-```bash
 python -m streamlit run app/ui/streamlit_app.py
 
 
@@ -139,12 +138,7 @@ research-copilot/
 
 🔐 Configuration
 
-Environment variables are required.
-Never commit .env files.
-
 Create one locally:
-
-cp .env.example .env
 
 Example:
 
@@ -166,15 +160,6 @@ python -m app.pipelines.run_full_pipeline
 
 The Streamlit UI internally calls the same pipeline.
 
-⸻
-
-🧠 Is This RAG?
-
-No — intentionally.
-
-This is an agentic analysis pipeline, not a retrieval-augmented QA system.
-
-RAG can be added later in parallel (e.g., “Ask questions over extracted sections”), but the core value here is structured reasoning across papers, not just answering queries.
 
 ⸻
 
