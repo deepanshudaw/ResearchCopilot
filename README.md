@@ -137,27 +137,6 @@ Data and Parsing:
 
 ⸻
 
-Configuration
-
-Create a local environment file (never commit it):
-
-cp .env.example .env
-
-Example:
-
-LLM_PROVIDER=ollama
-OLLAMA_MODEL=mistral
-OLLAMA_URL=http://localhost:11434
-
-CRITIC_PROVIDER=gemini
-CRITIC_GEMINI_API_KEY=your_key_here
-CRITIC_GEMINI_MODEL=gemini-flash-latest
-
-DB_PATH=research.db
-
-
-⸻
-
 Known Limitations (v1)
 	•	arXiv API rate limits
 	•	Occasional malformed LLM JSON outputs
