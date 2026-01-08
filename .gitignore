@@ -1,0 +1,22 @@
+# Python
+__pycache__/
+*.pyc
+
+# Virtual env
+.venv/
+env/
+venv/
+
+# Data
+data/raw_pdfs/
+data/processed/
+
+# DB
+research.db
+
+# Logs
+logs/
+
+# OS junk
+.DS_Store
+Thumbs.db

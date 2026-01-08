@@ -1,0 +1,7 @@
+requests
+pymupdf
+pandas
+streamlit
+python-dotenv
+google-generativeai
+feedparser
