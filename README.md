@@ -1,54 +1,44 @@
+Got it — thanks for the clarification.
+Below is ONLY the raw Markdown content, nothing else. You can select all → copy → paste directly into README.md. No emojis, no extra text, no commentary.
+
+⸻
+
+
 # Research Copilot
 
-**Research Copilot** is an **agentic literature analysis system** that automates the journey from raw research papers to structured insights, synthesis, and critique using Large Language Models (LLMs).
+Research Copilot is an agentic literature analysis system built around three cooperating AI agents. It automates the journey from raw research papers to structured insights, synthesis, and critical evaluation.
 
-It is built to help researchers, students, and engineers **rapidly understand a research area**, identify trends, gaps, and evaluate the quality of synthesized conclusions.
+A key design choice in this project is model separation of concerns:
+- Ollama (local LLM) performs primary extraction and synthesis
+- Gemini (cloud LLM) is used as a Critic Agent to review, challenge, and improve Ollama’s outputs
 
----
-
-##  What This Project Does
-
-Given a research topic, Research Copilot:
-
-1.  Searches arXiv for relevant papers  
-2.  Downloads and parses PDFs  
-3.  Extracts structured metadata using an LLM agent  
-4.  Synthesizes insights across papers  
-5.  Critiques the synthesis using a Critic Agent  
-6.  Visualizes everything in a Streamlit UI  
-
-All stages are **modular, inspectable, and agent-driven**.
+This explicit generation → critique loop improves reliability, depth, and reasoning quality.
 
 ---
 
-##  Architecture Overview
+## Core Idea
 
-Topic
-│
-▼
-[ arXiv Ingestion ]
-│
-▼
-[ PDF Parsing ]
-│
-▼
-[ Extraction Agent ]
-│   → task, method, datasets, metrics, results, limitations
-▼
-[ Synthesis Agent ]
-│   → trends, dominant tasks, gaps, open questions
-▼
-[ Critic Agent ]
-→ strengths, weaknesses, rating, suggested repairs
+Most tools retrieve papers.
 
-Each agent runs independently and writes outputs to **disk** and **SQLite**.
+Research Copilot reasons across them using agents.
+
+The system is intentionally built to:
+- Decompose research understanding into stages
+- Make each stage inspectable
+- Add external critical oversight using a stronger model
 
 ---
 
-## Agents
+## Three-Agent Architecture
 
-### 🔍 Extraction Agent
-Reads parsed paper sections and produces structured JSON:
+### 1. Extraction Agent (Ollama)
+
+Role: Convert unstructured paper text into structured research metadata.
+
+Input:
+- Parsed paper sections from PDFs
+
+Output (JSON):
 - task
 - method
 - datasets
@@ -56,56 +46,104 @@ Reads parsed paper sections and produces structured JSON:
 - key results
 - limitations
 
-### Synthesis Agent
-Aggregates extractions to identify:
-- dominant research directions
-- common metrics and datasets
-- gaps and open problems
-
-### Critic Agent
-Evaluates synthesis quality and outputs:
-- overall rating (out of 10)
-- strengths & weaknesses
-- suggested repairs
-- improved synthesis draft
+This agent runs locally using Ollama, making it cheap to iterate, fast for batch processing, and fully inspectable.
 
 ---
 
-## Streamlit UI
+### 2. Synthesis Agent (Ollama)
 
-The Streamlit app provides:
+Role: Aggregate extractions across papers to identify higher-level insights.
 
--  One-click pipeline execution
--  Browse extracted papers
--  View synthesis outputs
--  Inspect critic feedback
--  Live pipeline logs
+Input:
+- Structured outputs from multiple Extraction Agents
 
-Run it with:
+Output:
+- Dominant research tasks
+- Common datasets and metrics
+- Recurring methods
+- Gaps and open research questions
+
+This agent focuses on pattern discovery, not critique.
+
+---
+
+### 3. Critic Agent (Gemini)
+
+Role: Critically evaluate the synthesis produced by Ollama.
+
+This agent intentionally uses Gemini to avoid self-reinforcement and introduce external judgment.
+
+Output:
+- Overall quality rating (out of 10)
+- Strengths of the synthesis
+- Weaknesses and blind spots
+- Suggested repairs
+- Improved synthesis draft
+
+This mirrors real-world workflows where one system produces and another reviews.
+
+---
+
+## Why Dual LLMs
+
+Using the same model for generation and critique often leads to agreement bias and missed errors.
+
+Research Copilot avoids this by:
+- Letting Ollama generate
+- Letting Gemini critique
+
+This separation increases criticality, trustworthiness, and explainability.
+
+---
+
+## End-to-End Pipeline
+
+Research Topic  
+→ arXiv Ingestion  
+→ PDF Parsing  
+→ Extraction Agent (Ollama)  
+→ Synthesis Agent (Ollama)  
+→ Critic Agent (Gemini)
+
+Each step writes intermediate artifacts to disk or database, making the system transparent and debuggable.
+
+---
+
+## Streamlit User Interface
+
+The Streamlit UI allows users to:
+- Run the full pipeline with one click
+- Inspect extracted papers
+- Explore synthesis outputs
+- Review critic feedback
+- Observe live pipeline logs
+
+Run locally with:
+
 
 python -m streamlit run app/ui/streamlit_app.py
 
 
 ⸻
 
-⚙️ Tech Stack
+Tech Stack
 
-Core
+Languages and Frameworks:
 	•	Python 3.10+
-	•	SQLite
 	•	Streamlit
+	•	SQLite
 
-LLMs
-	•	Ollama (local models like mistral)
-	•	Gemini (optional, higher-quality synthesis & critique)
+LLMs:
+	•	Ollama (local inference)
+	•	Gemini (external critic model)
 
-Parsing & Ingestion
-	•	PyMuPDF (PDF parsing)
-	•	feedparser (arXiv API)
+Data and Parsing:
+	•	arXiv API (feedparser)
+	•	PyMuPDF
 
 ⸻
 
-📁 Project Structure
+Project Structure
 
 research-copilot/
 ├── app/
@@ -136,9 +174,11 @@ research-copilot/
 
 ⸻
 
-🔐 Configuration
+Configuration
 
-Create one locally:
+Create a local environment file (never commit it):
+
+cp .env.example .env
 
 Example:
 
@@ -146,34 +186,39 @@ LLM_PROVIDER=ollama
 OLLAMA_MODEL=mistral
 OLLAMA_URL=http://localhost:11434
 
-GEMINI_API_KEY=your_key_here
 CRITIC_PROVIDER=gemini
+CRITIC_GEMINI_API_KEY=your_key_here
+CRITIC_GEMINI_MODEL=gemini-flash-latest
 
 DB_PATH=research.db
 
 
 ⸻
 
-🚧 Known Limitations (v1)
-	•	arXiv API rate limiting
-	•	Occasional LLM JSON formatting errors
-	•	No embedding / RAG layer yet
+Known Limitations (v1)
+	•	arXiv API rate limits
+	•	Occasional malformed LLM JSON outputs
+	•	No embedding-based retrieval yet
 
-These are design-acknowledged, not architectural blockers.
+These are engineering tradeoffs, not architectural constraints.
 
 ⸻
 
-🚀 Future Work
-	•	Parallel RAG pipeline
-	•	Embeddings over extracted sections
-	•	Topic clustering & comparison
-	•	Report export (Markdown / LaTeX)
-	•	Cloud deployment
+Why This Project Matters
 
+This project demonstrates:
+	•	Multi-agent system design
+	•	Model orchestration
+	•	Separation of generation and critique
+	•	Practical LLM evaluation techniques
+	•	End-to-end system thinking
 
+It is intentionally designed to be explainable, demoable, and extensible.
 
-👤 Author
+⸻
+
+Author
 
 Deepanshu Dawande
-MSc Data Science & AI
-Agentic Systems · LLM Evaluation · Applied ML
+MSc Data Science and AI
+Agentic Systems, LLM Evaluation, Applied Machine Learning
