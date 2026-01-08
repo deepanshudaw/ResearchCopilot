@@ -1,9 +1,3 @@
-Got it — thanks for the clarification.
-Below is ONLY the raw Markdown content, nothing else. You can select all → copy → paste directly into README.md. No emojis, no extra text, no commentary.
-
-⸻
-
-
 # Research Copilot
 
 Research Copilot is an agentic literature analysis system built around three cooperating AI agents. It automates the journey from raw research papers to structured insights, synthesis, and critical evaluation.
